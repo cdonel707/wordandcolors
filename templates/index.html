@@ -160,6 +160,139 @@
             animation: float 20s infinite;
         }
 
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2em;
+                margin-bottom: 0.5em;
+            }
+
+            input {
+                width: 90%;
+                font-size: 1em;
+                padding: 12px 20px;
+            }
+
+            button {
+                width: 90%;
+                font-size: 1em;
+                padding: 12px 20px;
+                margin: 10px auto;
+                display: block;
+            }
+
+            .color-display {
+                width: 200px;
+                height: 200px;
+            }
+
+            .info-text {
+                font-size: 1em;
+                padding: 0 10px;
+            }
+        }
+
+        /* Small mobile styles */
+        @media (max-width: 380px) {
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .color-display {
+                width: 150px;
+                height: 150px;
+            }
+
+            .container {
+                padding: 0.5rem;
+            }
+        }
+
+        /* Landscape orientation fixes */
+        @media (max-height: 600px) and (orientation: landscape) {
+            .container {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+                align-items: center;
+            }
+
+            .input-group {
+                margin: 1em 0;
+            }
+
+            .color-display {
+                width: 150px;
+                height: 150px;
+            }
+
+            h1 {
+                grid-column: 1 / -1;
+                font-size: 1.5em;
+                margin-bottom: 0.5em;
+            }
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) {
+            .color-display:hover {
+                transform: none;
+            }
+
+            button:hover {
+                transform: none;
+            }
+
+            a:hover {
+                transform: none;
+            }
+
+            /* Add active states for touch devices */
+            button:active {
+                transform: scale(0.95);
+            }
+
+            a:active {
+                background: rgba(255, 255, 255, 0.4);
+            }
+        }
+
+        /* Fix for devices with notches */
+        @supports (padding: env(safe-area-inset-top)) {
+            body {
+                padding-top: env(safe-area-inset-top);
+                padding-bottom: env(safe-area-inset-bottom);
+                padding-left: env(safe-area-inset-left);
+                padding-right: env(safe-area-inset-right);
+            }
+        }
+
+        /* Reduce motion if user prefers */
+        @media (prefers-reduced-motion: reduce) {
+            .particle {
+                animation: none;
+            }
+            
+            body {
+                animation: none;
+                background: linear-gradient(-45deg, #ee7752, #e73c7e);
+                background-size: 100% 100%;
+            }
+
+            .color-display {
+                transition: none;
+            }
+
+            h1 {
+                animation: none;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -179,13 +312,23 @@
     </div>
 
     <script>
-        // Create floating particles
+        // Add touch detection
+        function isTouchDevice() {
+            return (('ontouchstart' in window) ||
+                (navigator.maxTouchPoints > 0) ||
+                (navigator.msMaxTouchPoints > 0));
+        }
+
+        // Modify particle creation for better mobile performance
         function createParticles() {
             const particlesContainer = document.getElementById('particles');
-            for (let i = 0; i < 50; i++) {
+            // Reduce number of particles on mobile
+            const particleCount = isTouchDevice() ? 20 : 50;
+            
+            for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
-                particle.style.width = Math.random() * 5 + 'px';
+                particle.style.width = Math.random() * (isTouchDevice() ? 3 : 5) + 'px';
                 particle.style.height = particle.style.width;
                 particle.style.left = Math.random() * 100 + 'vw';
                 particle.style.top = Math.random() * 100 + 'vh';
@@ -194,6 +337,16 @@
                 particlesContainer.appendChild(particle);
             }
         }
+
+        // Add viewport height fix for mobile browsers
+        function setVH() {
+            let vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+
+        // Call on page load and resize
+        window.addEventListener('resize', setVH);
+        setVH();
 
         async function convertWord() {
             const word = document.getElementById('wordInput').value;
