@@ -3,46 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word to Color Converter</title>
+    <title>Word to Color Magic ✨</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
             max-width: 800px;
             margin: 0 auto;
-            padding: 20px;
-            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
         }
-        .color-display {
-            width: 200px;
-            height: 200px;
-            margin: 20px auto;
-            border: 1px solid #ccc;
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 1em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: rainbow 5s infinite;
         }
-        .result {
-            margin: 20px 0;
-            display: none;
+
+        @keyframes rainbow {
+            0% { color: #ff0000; }
+            20% { color: #ffff00; }
+            40% { color: #00ff00; }
+            60% { color: #00ffff; }
+            80% { color: #ff00ff; }
+            100% { color: #ff0000; }
         }
-        input, button {
+
+        .input-group {
+            margin: 2em 0;
+        }
+
+        input {
             font-size: 1.2em;
-            padding: 10px;
-            margin: 10px;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            width: 60%;
+            max-width: 400px;
         }
+
+        input:focus {
+            outline: none;
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        button {
+            font-size: 1.2em;
+            padding: 15px 30px;
+            margin: 10px;
+            border: none;
+            border-radius: 50px;
+            background: #ffffff;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .color-display {
+            width: 250px;
+            height: 250px;
+            margin: 2em auto;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .color-display:hover {
+            transform: rotate3d(1, 1, 1, 15deg);
+        }
+
+        .result {
+            margin: 2em 0;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .info-text {
+            font-size: 1.2em;
+            margin: 10px 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 1em;
+        }
+
+        a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Floating particles animation */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
     </style>
 </head>
 <body>
-    <h1>Word to Color Converter</h1>
-    <div>
-        <input type="text" id="wordInput" placeholder="Enter a word">
-        <button onclick="convertWord()">Convert</button>
-    </div>
-    <div class="result" id="result">
-        <div class="color-display" id="colorDisplay"></div>
-        <p id="rgbValue"></p>
-        <p id="hexValue"></p>
-        <p><a id="colorhexaLink" href="#" target="_blank">View on ColorHexa</a></p>
+    <div class="particles" id="particles"></div>
+    <div class="container">
+        <h1>✨ Word to Color Magic ✨</h1>
+        <div class="input-group">
+            <input type="text" id="wordInput" placeholder="Type any word...">
+            <button onclick="convertWord()">Transform! 🎨</button>
+        </div>
+        <div class="result" id="result">
+            <div class="color-display" id="colorDisplay"></div>
+            <p class="info-text" id="rgbValue"></p>
+            <p class="info-text" id="hexValue"></p>
+            <p><a id="colorhexaLink" href="#" target="_blank">✨ Explore on ColorHexa ✨</a></p>
+        </div>
     </div>
 
     <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = Math.random() * 5 + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.left = Math.random() * 100 + 'vw';
+                particle.style.top = Math.random() * 100 + 'vh';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDelay = Math.random() * 5 + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
         async function convertWord() {
             const word = document.getElementById('wordInput').value;
             if (!word) return;
@@ -64,6 +216,12 @@
                     `RGB: R=${data.rgb[0]}, G=${data.rgb[1]}, B=${data.rgb[2]}`;
                 document.getElementById('hexValue').textContent = `Hex: ${data.hex}`;
                 document.getElementById('colorhexaLink').href = data.colorhexa_url;
+
+                // Add animation to color display
+                const colorDisplay = document.getElementById('colorDisplay');
+                colorDisplay.style.animation = 'none';
+                colorDisplay.offsetHeight; // Trigger reflow
+                colorDisplay.style.animation = 'fadeIn 0.5s ease';
             } catch (error) {
                 console.error('Error:', error);
             }
@@ -75,6 +233,9 @@
                 convertWord();
             }
         });
+
+        // Initialize particles on load
+        createParticles();
     </script>
 </body>
 </html> 
