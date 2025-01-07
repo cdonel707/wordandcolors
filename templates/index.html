@@ -31,16 +31,17 @@
         .container {
             max-width: 800px;
             width: 90%;
-            margin: 50px auto;
             padding: 2rem;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            position: absolute;
+            position: fixed;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
+            overflow-y: auto;
+            max-height: 90vh;
         }
 
         h1 {
@@ -123,8 +124,14 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { 
+                opacity: 0; 
+                transform: translateY(10px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
         }
 
         .info-text {
@@ -239,6 +246,7 @@
                 top: 0;
                 left: 0;
                 margin: 1rem auto;
+                max-height: none;
             }
         }
 
